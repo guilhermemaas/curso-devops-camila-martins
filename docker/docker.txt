@@ -1,0 +1,14 @@
+ARG -> Variável durante o build.
+ENV -> Variável durante a execução.
+COPY -> Copia de fora para dentro.
+ADD -> Copia de links externos, e também pode descompactar.
+CMD vs Entrypoint -> Utilizando o CMD, é entendido que vai ser rodado um /bin/bash + o binário, script, etc. Por exemplo:
+["node", "server.js"] ou ["python", "flask_app.py"]
+WORKDIR -> Utilizado para criar o diretório da aplicação.
+
+docker run -d -> Rodar em background
+docker system prune -> Remove imagens, networks, volumes não utilizados.
+
+
+
+
