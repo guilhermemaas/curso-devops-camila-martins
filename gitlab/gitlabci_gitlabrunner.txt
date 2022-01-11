@@ -1,0 +1,57 @@
+ Comandos: GitLab CI / GitLab Runner
+
+kubectl get secrets
+kubectl get secret <secret name> -o jsonpath="{['data']['ca\.crt']}" | base64 --decode
+kubectl get secret default-token-hpmmb -o jsonpath="{['data']['ca\.crt']}" | base64 --decode
+kubectl apply -f gitlab-admin-service-account.yaml
+kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep gitlab | awk '{print $1}')
+kubectl get secrets -A
+helm repo add gitlab https://charts.gitlab.io
+kubectl get ns
+kubectl create ns gitlab
+helm install --namespace gitlab gitlab-runner -f values.yaml gitlab/gitlab-runner
+kubectl get sa -A
+kubectl get sa default -o yaml -n gitlab
+kubectl create clusterrolebinding default --clusterrole=cluster-admin --group=system:serviceaccounts --namespace=gitlab
+
+####### gitlab-admin-service-account.yaml
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: gitlab
+  namespace: kube-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: gitlab-admin
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+  - kind: ServiceAccount
+    name: gitlab
+    namespace: kube-system
+
+####### values do runner
+
+runners:
+  config: |
+    [[runners]]
+      [runners.kubernetes]
+        image = "ubuntu:16.04"
+        helper_cpu_limit = "200m"
+        privileged = true
+      [[runners.kubernetes.volumes.empty_dir]]
+        name = "docker-certs"
+        mount_path = "/certs/client"
+        medium = "Memory"
+
+gitlabUrl: "https://gitlab.com/"
+
+runnerRegistrationToken: "TOKEN DO RUNNER AQUI"
+
+## helpers:
+##    cpuLimit: 200m

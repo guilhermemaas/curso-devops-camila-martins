@@ -1,0 +1,22 @@
+git init
+git remote
+git status
+git add ../server.js
+git commit -m "(feature/node): change app get send"
+git push linuxtips main
+git push origin main
+git pull
+git checkout main
+git stash
+git checkout 1-upload-project-linuxtips-punk-do-devops
+git add .
+git commit -m "Update readme.md removing breaklines"
+git push -u origin 1-upload-project-linuxtips-punk-do-devops
+git config --global user.name camilla-m
+git config --global user.email "email"
+git commit --allow-empty -m "Allow empty"
+git log
+git remote --help
+git reset f04207 --hard
+git blame README.md
+git checkout -b new-branch
